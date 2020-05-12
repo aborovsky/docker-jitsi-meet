@@ -1,0 +1,6 @@
+#!/usr/bin/with-contenv bash
+#PULSE_DAEMON="pulseaudio -D"
+PULSE_DAEMON="pulseaudio --system -disallow-exit --disallow-module-loading"
+DAEMON="pacmd load-module module-pipe-sink file=/dev/snd format=s16 rate=44100 channels=2; socat file:/dev/snd tcp-listen:3000;"
+exec s6-setuidgid root /bin/bash -c "exec $PULSE_DAEMON"
+exec s6-setuidgid jibri /bin/bash -c "exec $DAEMON"
